@@ -1,0 +1,69 @@
+<h2>Keranjang Belanja</h2>
+
+<ul>
+{% for item in items %}
+    <li>
+        <strong>{{ item.nama }}</strong> - Rp {{ item.harga|floatformat:2 }}<br>
+
+        {% if item.gambar %}
+            <img src="{{ item.gambar.url }}" alt="{{ item.nama }}" width="100"><br>
+        {% endif %}
+
+        <!-- Kuantitas -->
+        <div style="margin-top: 5px; margin-bottom: 10px;">
+            <form action="{% url 'orders:update_quantity' item.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" name="action" value="decrease">–</button>
+            </form>
+
+            <form action="{% url 'orders:update_quantity' item.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1"
+                       style="width: 50px; text-align: center;" onchange="this.form.submit()">
+            </form>
+
+            <form action="{% url 'orders:update_quantity' item.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" name="action" value="increase">+</button>
+            </form>
+
+            <form action="{% url 'orders:remove' item.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" style="color: red;">Hapus</button>
+            </form>
+        </div>
+    </li>
+{% empty %}
+    <li><em>Keranjang masih kosong</em></li>
+{% endfor %}
+</ul>
+
+<p><strong>Total:</strong> Rp {{ total|floatformat:2 }}</p>
+<h3>Tambah Menu Langsung</h3>
+<form action="{% url 'orders:add' 0 %}" method="get" id="add-menu-form" onsubmit="return submitAddForm();">
+    <select name="menu_id" id="menu_id" required>
+        <option value="">-- Pilih Menu --</option>
+        {% for menu in all_menu %}
+            <option value="{{ menu.id }}">{{ menu.nama }} - Rp {{ menu.harga }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit">Tambah</button>
+</form>
+
+<script>
+function submitAddForm() {
+    const menuId = document.getElementById('menu_id').value;
+    if (menuId) {
+        // redirect ke /orders/add/<id>/
+        const form = document.getElementById('add-menu-form');
+        form.action = form.action.replace('/0/', `/${menuId}/`);
+        return true;
+    }
+    return false;
+}
+</script>
+<!-- Tambahan link ke halaman konfirmasi terpisah -->
+<p>
+    Ingin konfirmasi di halaman baru? <a href="{% url 'orders:confirmation-form' %}">Klik di sini</a>
+</p>
+<a href="{% url 'orders:clear' %}">Kosongkan Keranjang</a>

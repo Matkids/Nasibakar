@@ -1,0 +1,25 @@
+<h2>Halaman Konfirmasi Pemesanan</h2>
+
+<ul>
+  {% for item in items %}
+    <li>
+      {{ item.nama }} x{{ item.quantity }} - Rp {{ item.harga|floatformat:0 }}
+      {% if item.gambar %}
+        <br><img src="{{ item.gambar.url }}" width="80">
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>
+
+<p><strong>Total: Rp {{ total|floatformat:0 }}</strong></p>
+
+<form action="{% url 'orders:confirm' %}" method="post">
+    {% csrf_token %}
+    <label for="nama">Nama:</label><br>
+    <input type="text" id="nama" name="nama" required><br><br>
+    <label for="catatan">Catatan Tambahan:</label><br>
+    <textarea id="catatan" name="catatan" rows="3" cols="30"></textarea><br><br>
+    <button type="submit">Lanjutkan ke WhatsApp</button>
+</form>
+
+<a href="{% url 'orders:cart' %}">← Kembali ke Keranjang</a>

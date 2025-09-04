@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Nasi Bakar</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div class="flex">
+        <aside class="w-64 min-h-screen bg-green-700 text-white p-5 transition-transform duration-300 transform" id="sidebar">
+            <h1 class="text-2xl font-bold mb-6">Nasi Bakar</h1>
+            <nav class="flex flex-col space-y-4">
+                <a href="#" class="hover:bg-green-600 px-3 py-2 rounded">Dashboard</a>
+                <a href="{% url 'orders:cart' %}" class="hover:bg-green-600 px-3 py-2 rounded">Keranjang</a>
+                <a href="#" class="hover:bg-green-600 px-3 py-2 rounded">Tentang</a>
+            </nav>
+        </aside>
+
+        <!-- Content -->
+        <main class="flex-1 p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-semibold text-gray-800">Daftar Menu</h2>
+                <button onclick="toggleSidebar()" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">Toggle Sidebar</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for item in menu_items %}
+                <div class="bg-white shadow-md rounded-lg p-4">
+                    {% if item.gambar %}
+                        <img src="{{ item.gambar.url }}" alt="{{ item.nama }}" class="w-full h-40 object-cover rounded mb-4">
+                    {% endif %}
+                    <h3 class="text-xl font-bold text-gray-800">{{ item.nama }}</h3>
+                    <p class="text-green-700 font-semibold mb-3">Rp {{ item.harga }}</p>
+                    <a href="{% url 'orders:add' item.id %}" class="inline-block bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded transition">Pesan</a>
+                </div>
+                {% endfor %}
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
+        }
+    </script>
+</body>
+</html>
