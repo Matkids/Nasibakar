@@ -1,0 +1,22 @@
+# ========================
+# Prioritaskan Python di repo Django
+# ========================
+
+# Hitung file .py sebagai bahasa utama
+*.py linguist-detectable=true
+
+# Abaikan file statis & frontend (anggap sebagai vendored code)
+*.css linguist-vendored
+*.js linguist-vendored
+*.html linguist-vendored
+*.map linguist-vendored
+
+# Abaikan migration files (tidak dianggap sebagai source utama)
+*/migrations/*.py linguist-vendored
+
+# Abaikan environment / konfigurasi tambahan
+*.json linguist-vendored
+*.lock linguist-vendored
+*.toml linguist-vendored
+*.yml linguist-vendored
+*.yaml linguist-vendored
